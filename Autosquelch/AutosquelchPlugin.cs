@@ -89,7 +89,6 @@ namespace Autosquelch
         {
             Squelched = false;
             PluginRunning = true;
-            var d = Config.Instance.DeckExportDelay;
 
             GameEvents.OnGameStart.Add(() =>
             {
@@ -155,8 +154,8 @@ namespace Autosquelch
 
                 await MouseHelpers.ClickOnPoint(hearthstoneWindow, opponentHeroPosition, false);
 
-                await Task.Delay(TimeSpan.FromMilliseconds(Config.Instance.DeckExportDelay * 4));
-                var capture = await ScreenCapture.CaptureHearthstoneAsync(squelchBubblePosition, lockWidth, lockHeight, hearthstoneWindow);
+				await Task.Delay(TimeSpan.FromSeconds(0.3));
+				var capture = await ScreenCapture.CaptureHearthstoneAsync(squelchBubblePosition, lockWidth, lockHeight, hearthstoneWindow);
                 squelchBubbleVisible = HueAndBrightness.GetAverage(capture).Brightness > minBrightness;
                 if (!squelchBubbleVisible)
                     await Task.Delay(TimeSpan.FromSeconds(0.5));
