@@ -35,5 +35,9 @@ namespace Autosquelch
                 mouse_event((uint)RightUp, 0, 0, 0, UIntPtr.Zero);
 
         }
-    }
+		public static async Task MoveCursor(Point clientPoint)
+		{
+			Cursor.Position = new Point(clientPoint.X, clientPoint.Y);
+		}
+	}
 }

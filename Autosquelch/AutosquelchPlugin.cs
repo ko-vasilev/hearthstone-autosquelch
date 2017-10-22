@@ -6,6 +6,7 @@ using Hearthstone_Deck_Tracker.Plugins;
 using Hearthstone_Deck_Tracker.Utility;
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 using System.Threading.Tasks;
 
 namespace Autosquelch
@@ -131,6 +132,7 @@ namespace Autosquelch
                 return;
             }
 
+			var FirstMousePos = Cursor.Position;
             IntPtr hearthstoneWindow = User32.GetHearthstoneWindow();
             var HsRect = User32.GetHearthstoneRect(false);
             var Ratio = (4.0 / 3.0) / ((double)HsRect.Width / HsRect.Height);
@@ -162,6 +164,9 @@ namespace Autosquelch
             } while (!squelchBubbleVisible);
 
             await MouseHelpers.ClickOnPoint(hearthstoneWindow, squelchBubblePosition, true);
-        }
+			await Task.Delay(TimeSpan.FromSeconds(0.1));
+			await MouseHelpers.MoveCursor(FirstMousePos);
+
+		}
     }
 }
