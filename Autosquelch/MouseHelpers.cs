@@ -28,15 +28,16 @@ namespace Autosquelch
             else
                 mouse_event((uint)RightDown, 0, 0, 0, UIntPtr.Zero);
 
-            await Task.Delay(Config.Instance.DeckExportDelay);
-
             //mouse up
             if (leftMouseButton)
                 mouse_event((uint)LeftUp, 0, 0, 0, UIntPtr.Zero);
             else
                 mouse_event((uint)RightUp, 0, 0, 0, UIntPtr.Zero);
 
-            await Task.Delay(Config.Instance.DeckExportDelay);
         }
-    }
+		public static async Task MoveCursor(Point clientPoint)
+		{
+			Cursor.Position = new Point(clientPoint.X, clientPoint.Y);
+		}
+	}
 }

@@ -6,6 +6,7 @@ using Hearthstone_Deck_Tracker.Plugins;
 using Hearthstone_Deck_Tracker.Utility;
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 using System.Threading.Tasks;
 
 namespace Autosquelch
@@ -89,7 +90,6 @@ namespace Autosquelch
         {
             Squelched = false;
             PluginRunning = true;
-            var d = Config.Instance.DeckExportDelay;
 
             GameEvents.OnGameStart.Add(() =>
             {
@@ -132,6 +132,7 @@ namespace Autosquelch
                 return;
             }
 
+			var FirstMousePos = Cursor.Position;
             IntPtr hearthstoneWindow = User32.GetHearthstoneWindow();
             var HsRect = User32.GetHearthstoneRect(false);
             var Ratio = (4.0 / 3.0) / ((double)HsRect.Width / HsRect.Height);
@@ -155,14 +156,17 @@ namespace Autosquelch
 
                 await MouseHelpers.ClickOnPoint(hearthstoneWindow, opponentHeroPosition, false);
 
-                await Task.Delay(TimeSpan.FromMilliseconds(Config.Instance.DeckExportDelay * 4));
-                var capture = await ScreenCapture.CaptureHearthstoneAsync(squelchBubblePosition, lockWidth, lockHeight, hearthstoneWindow);
+				await Task.Delay(TimeSpan.FromSeconds(0.1));
+				var capture = await ScreenCapture.CaptureHearthstoneAsync(squelchBubblePosition, lockWidth, lockHeight, hearthstoneWindow);
                 squelchBubbleVisible = HueAndBrightness.GetAverage(capture).Brightness > minBrightness;
                 if (!squelchBubbleVisible)
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+                    await Task.Delay(TimeSpan.FromSeconds(0.1));
             } while (!squelchBubbleVisible);
 
             await MouseHelpers.ClickOnPoint(hearthstoneWindow, squelchBubblePosition, true);
-        }
+			await Task.Delay(TimeSpan.FromSeconds(0.1));
+			await MouseHelpers.MoveCursor(FirstMousePos);
+
+		}
     }
 }
