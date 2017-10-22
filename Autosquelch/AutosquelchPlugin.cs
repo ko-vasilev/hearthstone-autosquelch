@@ -156,11 +156,11 @@ namespace Autosquelch
 
                 await MouseHelpers.ClickOnPoint(hearthstoneWindow, opponentHeroPosition, false);
 
-				await Task.Delay(TimeSpan.FromSeconds(0.3));
+				await Task.Delay(TimeSpan.FromSeconds(0.1));
 				var capture = await ScreenCapture.CaptureHearthstoneAsync(squelchBubblePosition, lockWidth, lockHeight, hearthstoneWindow);
                 squelchBubbleVisible = HueAndBrightness.GetAverage(capture).Brightness > minBrightness;
                 if (!squelchBubbleVisible)
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+                    await Task.Delay(TimeSpan.FromSeconds(0.1));
             } while (!squelchBubbleVisible);
 
             await MouseHelpers.ClickOnPoint(hearthstoneWindow, squelchBubblePosition, true);
