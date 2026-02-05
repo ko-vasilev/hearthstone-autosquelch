@@ -89,7 +89,8 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
             get
             {
                 return Hearthstone_Deck_Tracker.API.Core.Game.CurrentGameMode != GameMode.Practice
-                        && Hearthstone_Deck_Tracker.API.Core.Game.CurrentGameMode != GameMode.None;
+                        && Hearthstone_Deck_Tracker.API.Core.Game.CurrentGameMode != GameMode.None 
+                        && Hearthstone_Deck_Tracker.API.Core.Game.CurrentGameMode != GameMode.Battlegrounds;
             }
         }
 
