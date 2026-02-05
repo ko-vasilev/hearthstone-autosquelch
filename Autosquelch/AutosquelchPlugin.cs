@@ -68,7 +68,7 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
         {
         }
 
-        private bool Squelched { get; set; }
+        private static bool Squelched { get; set; }
 
         private bool PluginRunning { get; set; }
 
@@ -95,7 +95,6 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
 
         public void OnLoad()
         {
-            Squelched = false;
             PluginRunning = true;
 
             HotKeyManager.RegisterHotkey(DefaultHotKey, ToggleAutosquelch, "Toggle Autosquelch");
