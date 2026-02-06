@@ -100,7 +100,7 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
 
             HotKeyManager.RegisterHotkey(DefaultHotKey, ToggleAutosquelch, "Toggle Autosquelch");
 
-            GameEvents.OnGameStart.Add(() =>
+            GameEvents.OnGameEnd.Add(() =>
             {
                 Squelched = false;
             });
