@@ -1,4 +1,4 @@
-﻿using Hearthstone_Deck_Tracker;
+using Hearthstone_Deck_Tracker;
 using Hearthstone_Deck_Tracker.API;
 using Hearthstone_Deck_Tracker.Enums;
 using Hearthstone_Deck_Tracker.Plugins;
@@ -8,8 +8,11 @@ using Hearthstone_Deck_Tracker.Utility.Logging;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Autosquelch
 {
@@ -89,7 +92,7 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
             get
             {
                 return Hearthstone_Deck_Tracker.API.Core.Game.CurrentGameMode != GameMode.Practice
-                        && Hearthstone_Deck_Tracker.API.Core.Game.CurrentGameMode != GameMode.None 
+                        && Hearthstone_Deck_Tracker.API.Core.Game.CurrentGameMode != GameMode.None
                         && Hearthstone_Deck_Tracker.API.Core.Game.CurrentGameMode != GameMode.Battlegrounds;
             }
         }
@@ -151,7 +154,7 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
             var HsRect = User32.GetHearthstoneRect(true);
             var Ratio = (4.0 / 3.0) / ((double)HsRect.Width / HsRect.Height);
             Point opponentHeroPosition = new Point((int)Helper.GetScaledXPos(0.5, HsRect.Width, Ratio), (int)(0.17 * HsRect.Height));
-            Point squelchBubblePosition = new Point((int)Helper.GetScaledXPos(0.4, HsRect.Width, Ratio), (int)(0.1 * HsRect.Height));
+            Point squelchBubblePosition = new Point((int)Helper.GetScaledXPos(0.38, HsRect.Width, Ratio), (int)(0.08 * HsRect.Height));
             // setting this as a "width" value relative to height, maybe not best solution?
             const double xScale = 0.051; // 55px @ height = 1080
             const double yScale = 0.025; // 27px @ height = 1080
@@ -188,7 +191,9 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
             MouseHelpers.SetCursorPosition(previousMousePosition);
         }
 
-        private readonly HotKey DefaultHotKey = new HotKey(ModifierKeys.Control | ModifierKeys.Alt, System.Windows.Forms.Keys.D);
+        private readonly HotKey DefaultHotKey = new HotKey(Hearthstone_Deck_Tracker.Utility.HotKeys.ModifierKeys.Control |
+                                                            Hearthstone_Deck_Tracker.Utility.HotKeys.ModifierKeys.Alt,
+                                                            System.Windows.Forms.Keys.D);
 
         private void ToggleAutosquelch()
         {
