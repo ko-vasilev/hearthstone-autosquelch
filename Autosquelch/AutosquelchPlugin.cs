@@ -148,7 +148,8 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
                 return;
             }
 
-            var HsRect = User32.GetHearthstoneRect(true);
+            // Mouse input and capture use client coordinates in pixels.
+            var HsRect = User32.GetHearthstoneRect(false);
             var Ratio = (4.0 / 3.0) / ((double)HsRect.Width / HsRect.Height);
             Point opponentHeroPosition = new Point((int)Helper.GetScaledXPos(0.5, HsRect.Width, Ratio), (int)(0.17 * HsRect.Height));
             Point squelchBubblePosition = new Point((int)Helper.GetScaledXPos(0.4, HsRect.Width, Ratio), (int)(0.1 * HsRect.Height));
@@ -175,8 +176,8 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
                 await MouseHelpers.ClickOnPoint(hearthstoneWindow, opponentHeroPosition, false);
 
                 await Task.Delay(TimeSpan.FromMilliseconds(Config.Instance.OverlayMouseOverTriggerDelay));
-                var capture = await ScreenCapture.CaptureHearthstoneAsync(squelchBubblePosition, lockWidth, lockHeight, hearthstoneWindow);
-                squelchBubbleVisible = CalculateAverageLightness(capture) > minBrightness;
+                using (var capture = await ScreenCapture.CaptureHearthstoneAsync(squelchBubblePosition, lockWidth, lockHeight, hearthstoneWindow))
+                    squelchBubbleVisible = capture != null && CalculateAverageLightness(capture) > minBrightness;
                 if (!squelchBubbleVisible)
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(Config.Instance.OverlayMouseOverTriggerDelay));
@@ -184,7 +185,8 @@ To temporarily turn off the autosquelch, press Ctrl+Alt+D";
                 }
             } while (!squelchBubbleVisible && timesTried <= maxTries);
 
-            await MouseHelpers.ClickOnPoint(hearthstoneWindow, squelchBubblePosition, true);
+            if (squelchBubbleVisible && ShouldTrySquelch && User32.IsHearthstoneInForeground())
+                await MouseHelpers.ClickOnPoint(hearthstoneWindow, squelchBubblePosition, true);
             MouseHelpers.SetCursorPosition(previousMousePosition);
         }
 
